@@ -2376,11 +2376,11 @@ const HTML_CONTENT = `<!DOCTYPE html>
         // 显示当前用户排名
         const currentRankDisplay = document.getElementById('currentRankDisplay');
         if (data.currentUser) {
-          currentRankDisplay.innerHTML = \`
-            你的排名: 第 \${data.currentUser.rank} 名 |
-            已完成: \${data.currentUser.completed}/35 |
-            总用时: \${data.currentUser.time}
-          \`;
+          currentRankDisplay.innerHTML = \\\`
+            你的排名: 第 \\\${data.currentUser.rank} 名 |
+            已完成: \\\${data.currentUser.completed}/35 |
+            总用时: \\\${data.currentUser.time}
+          \\\`;
           currentRankDisplay.style.display = 'block';
         } else {
           currentRankDisplay.innerHTML = '完成第一题即可上榜！';
@@ -2396,14 +2396,14 @@ const HTML_CONTENT = `<!DOCTYPE html>
 
           const rowClass = user.isCurrentUser ? 'current-user' : '';
 
-          return \`
-            <tr class="\${rowClass}">
-              <td class="\${rankClass}">\${user.rank}</td>
-              <td>\${user.id}</td>
-              <td>\${user.completed}/35</td>
-              <td>\${user.time}</td>
+          return \\\`
+            <tr class="\\\${rowClass}">
+              <td class="\\\${rankClass}">\\\${user.rank}</td>
+              <td>\\\${user.id}</td>
+              <td>\\\${user.completed}/35</td>
+              <td>\\\${user.time}</td>
             </tr>
-          \`;
+          \\\`;
         }).join('');
 
       } catch (error) {
@@ -2518,27 +2518,27 @@ const HTML_CONTENT = `<!DOCTYPE html>
           let testEnvButton = '';
           if (level.testEnv) {
             const testEnvUrl = typeof level.testEnv === 'string' ?
-              \`/test/\${level.testEnv}\` :
-              \`/test/\${level.id}\`;
-            testEnvButton = \`
-              <button class="test-env-btn" onclick="event.stopPropagation(); window.open('\${testEnvUrl}', '_blank')">
+              \\\`/test/\\\${level.testEnv}\\\` :
+              \\\`/test/\\\${level.id}\\\`;
+            testEnvButton = \\\`
+              <button class="test-env-btn" onclick="event.stopPropagation(); window.open('\\\${testEnvUrl}', '_blank')">
                 测试环境
               </button>
-            \`;
+            \\\`;
           }
 
-          return \`
-            <div class="level-card \${completedClass}" onclick="openLevel(\${level.id})">
+          return \\\`
+            <div class="level-card \\\${completedClass}" onclick="openLevel(\\\${level.id})">
               <div class="level-header">
-                <span class="level-id">Level \${level.id}</span>
-                <span class="difficulty \${level.difficulty}">\${level.difficulty}</span>
+                <span class="level-id">Level \\\${level.id}</span>
+                <span class="difficulty \\\${level.difficulty}">\\\${level.difficulty}</span>
               </div>
-              <h3 class="level-name">\${level.name}</h3>
-              <p class="category"> \${level.category}</p>
-              <p class="description">\${level.description}</p>
-              \${testEnvButton}
+              <h3 class="level-name">\\\${level.name}</h3>
+              <p class="category"> \\\${level.category}</p>
+              <p class="description">\\\${level.description}</p>
+              \\\${testEnvButton}
             </div>
-          \`;
+          \\\`;
         }).join('');
 
         // 更新进度
@@ -2560,33 +2560,33 @@ const HTML_CONTENT = `<!DOCTYPE html>
         let testEnvButton = '';
         if (currentLevel.testEnv) {
           const testEnvUrl = typeof currentLevel.testEnv === 'string' ?
-            \`/test/\${currentLevel.testEnv}\` :
-            \`/test/\${currentLevel.id}\`;
-          testEnvButton = \`
-            <button class="test-env-btn-modal" onclick="window.open('\${testEnvUrl}', '_blank')" style="margin-top: 10px;">
+            \\\`/test/\\\${currentLevel.testEnv}\\\` :
+            \\\`/test/\\\${currentLevel.id}\\\`;
+          testEnvButton = \\\`
+            <button class="test-env-btn-modal" onclick="window.open('\\\${testEnvUrl}', '_blank')" style="margin-top: 10px;">
               打开测试环境
             </button>
-          \`;
+          \\\`;
         }
 
-        content.innerHTML = \`
+        content.innerHTML = \\\`
           <h2 style="color: #00d4ff; margin-bottom: 20px;">
-            Level \${currentLevel.id}: \${currentLevel.name}
+            Level \\\${currentLevel.id}: \\\${currentLevel.name}
           </h2>
           <p style="color: #00ff41; margin-bottom: 10px;">
-            <strong>难度:</strong> <span class="difficulty \${currentLevel.difficulty}">\${currentLevel.difficulty}</span>
+            <strong>难度:</strong> <span class="difficulty \\\${currentLevel.difficulty}">\\\${currentLevel.difficulty}</span>
           </p>
           <p style="color: #00ff41; margin-bottom: 20px;">
-            <strong>分类:</strong> \${currentLevel.category}
+            <strong>分类:</strong> \\\${currentLevel.category}
           </p>
           <p style="color: #a0a0a0; margin-bottom: 20px; line-height: 1.6;">
-            \${currentLevel.description}
+            \\\${currentLevel.description}
           </p>
           <div class="hint-box">
             <strong style="color: #00d4ff;"> 提示:</strong><br>
-            <span style="color: #00ff41;">\${currentLevel.hint}</span>
+            <span style="color: #00ff41;">\\\${currentLevel.hint}</span>
           </div>
-          \${testEnvButton}
+          \\\${testEnvButton}
           <div class="input-group">
             <label for="answerInput">请输入你的答案:</label>
             <input type="text" id="answerInput" placeholder="输入答案或flag..."
@@ -2594,7 +2594,7 @@ const HTML_CONTENT = `<!DOCTYPE html>
           </div>
           <button class="submit-btn" onclick="submitAnswer()"> 提交答案</button>
           <div class="result-box" id="resultBox"></div>
-        \`;
+        \\\`;
 
         modal.classList.add('active');
       } catch (error) {
@@ -2639,17 +2639,17 @@ const HTML_CONTENT = `<!DOCTYPE html>
 
         if (result.passed) {
           resultBox.className = 'result-box success';
-          let flagDisplay = \`<div class="flag"> \${result.flag}</div>\`;
+          let flagDisplay = \\\`<div class="flag"> \\\${result.flag}</div>\\\`;
 
           // 如果有MD5 hash，也显示出来
           if (result.flagHash) {
-            flagDisplay += \`<div style="margin-top: 10px; color: #00d4ff; font-size: 12px;">MD5: \${result.flagHash}</div>\`;
+            flagDisplay += \\\`<div style="margin-top: 10px; color: #00d4ff; font-size: 12px;">MD5: \\\${result.flagHash}</div>\\\`;
           }
 
-          resultBox.innerHTML = \`
-            <strong> \${result.message}</strong>
-            \${flagDisplay}
-          \`;
+          resultBox.innerHTML = \\\`
+            <strong> \\\${result.message}</strong>
+            \\\${flagDisplay}
+          \\\`;
 
           // 重新加载关卡列表以显示完成标记（从服务器获取最新进度）
           setTimeout(() => {
@@ -2657,9 +2657,9 @@ const HTML_CONTENT = `<!DOCTYPE html>
           }, 1000);
         } else {
           resultBox.className = 'result-box error';
-          resultBox.innerHTML = \`<strong> \${result.message}</strong>\`;
+          resultBox.innerHTML = \\\`<strong> \\\${result.message}</strong>\\\`;
           if (result.hint) {
-            resultBox.innerHTML += \`<br><small style="color: #00d4ff;">\${result.hint}</small>\`;
+            resultBox.innerHTML += \\\`<br><small style="color: #00d4ff;">\\\${result.hint}</small>\\\`;
           }
         }
       } catch (error) {
@@ -2834,11 +2834,11 @@ const SQL_LAB_HTML = `<!DOCTYPE html>
       if (username.includes("' OR '1'='1") || username.includes("' OR 1=1") ||
           username.includes("admin' --") || username.includes("admin'--")) {
         resultDiv.className = 'result success show';
-        resultDiv.innerHTML = \`
+        resultDiv.innerHTML = \\\`
           <strong>登录成功！管理员权限已获取</strong><br><br>
-          检测到 SQL 注入！你的 payload: <code>\${username}</code><br>
+          检测到 SQL 注入！你的 payload: <code>\\\${username}</code><br>
           现在将这个 payload 提交到 Level 4 获取 flag
-        \`;
+        \\\`;
       } else {
         resultDiv.className = 'result error show';
         resultDiv.innerHTML = '登录失败：用户名或密码错误';
@@ -2973,13 +2973,13 @@ const XSS_LAB_HTML = `<!DOCTYPE html>
       if (input.includes('<script>') || input.includes('onerror=') ||
           input.includes('onload=') || input.includes('javascript:')) {
         xssDetected = true;
-        resultDiv.innerHTML = \`
+        resultDiv.innerHTML = \\\`
           <div class="dangerous" style="padding: 15px; background: rgba(255,68,68,0.2); border-radius: 5px;">
             XSS 漏洞检测成功！<br>
-            你的 payload: <code>\${input}</code><br><br>
+            你的 payload: <code>\\\${input}</code><br><br>
             现在将这个 payload 提交到 Level 8 获取 flag
           </div>
-        \`;
+        \\\`;
       }
     }
 
@@ -2997,24 +2997,24 @@ const XSS_LAB_HTML = `<!DOCTYPE html>
         .replace(/'/g, '&#x27;');
 
       display.innerHTML = '<div style="color: #00ff41;">' + escaped + '</div>';
-      resultDiv.innerHTML = \`
+      resultDiv.innerHTML = \\\`
         <div class="safe" style="padding: 15px; background: rgba(0,255,65,0.1); border-radius: 5px;">
           安全渲染成功！所有HTML标签已被转义<br>
           这就是防御XSS的正确方法
         </div>
-      \`;
+      \\\`;
     }
 
     // 覆盖 alert 以显示友好提示
     window.alert = function(msg) {
       const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = \`
+      resultDiv.innerHTML = \\\`
         <div style="padding: 20px; background: rgba(255,165,0,0.2); border: 2px solid #ffa500; border-radius: 5px; text-align: center;">
           <h2 style="color: #ffa500;">XSS 触发成功！</h2>
-          <p>原始弹窗内容: \${msg}</p>
+          <p>原始弹窗内容: \\\${msg}</p>
           <p style="color: #00ff41;">恭喜！你成功执行了 XSS 攻击</p>
         </div>
-      \`;
+      \\\`;
     };
   </script>
 </body>
