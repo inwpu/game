@@ -1704,11 +1704,32 @@ const HTML_CONTENT = `<!DOCTYPE html>
       51%, 100% { opacity: 0; }
     }
 
+    /* 分类展示 */
+    .category-section {
+      margin-bottom: 50px;
+    }
+
+    .category-title {
+      color: #00d4ff;
+      font-size: 28px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #00ff41;
+      text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+      position: relative;
+    }
+
+    .category-title::before {
+      content: '▶';
+      margin-right: 10px;
+      color: #00ff41;
+    }
+
     .levels-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .level-card {
@@ -2208,7 +2229,7 @@ const HTML_CONTENT = `<!DOCTYPE html>
       </div>
     </header>
 
-    <div class="levels-grid" id="levelsGrid">
+    <div id="levelsGrid">
       <div class="loader"></div>
     </div>
 
@@ -2498,45 +2519,79 @@ const HTML_CONTENT = `<!DOCTYPE html>
       }
     }
 
-    // 加载关卡列表
+    // 加载关卡列表（分类展示）
     async function loadLevels() {
       try {
-        const [levelsResponse, progressResponse] = await Promise.all([
-          fetch('/api/levels'),
-          fetch('/api/progress')
-        ]);
-
+        const levelsResponse = await fetch('/api/levels');
         const levels = await levelsResponse.json();
-        const progressData = await progressResponse.json();
-        const completedLevels = progressData.completed || [];
+
+        // 尝试获取进度，失败则使用空数组
+        let completedLevels = [];
+        try {
+          const progressResponse = await fetch('/api/progress');
+          if (progressResponse.ok) {
+            const progressData = await progressResponse.json();
+            completedLevels = progressData.completed || [];
+          }
+        } catch (e) {
+          console.log('进度获取失败，使用本地模式');
+        }
+
+        // 按分类分组
+        const categories = {
+          'Web安全': [],
+          '密码学': [],
+          '协议分析': [],
+          '进阶挑战': []
+        };
+
+        levels.forEach(level => {
+          if (categories[level.category]) {
+            categories[level.category].push(level);
+          }
+        });
 
         const grid = document.getElementById('levelsGrid');
-        grid.innerHTML = levels.map(level => {
-          const completed = completedLevels.includes(level.id);
-          const completedClass = completed ? 'completed' : '';
+        grid.innerHTML = Object.keys(categories).map(category => {
+          const categoryLevels = categories[category];
+          if (categoryLevels.length === 0) return '';
 
-          let testEnvButton = '';
-          if (level.testEnv) {
-            const testEnvUrl = typeof level.testEnv === 'string' ?
-              \\\`/test/\\\${level.testEnv}\\\` :
-              \\\`/test/\\\${level.id}\\\`;
-            testEnvButton = \\\`
-              <button class="test-env-btn" onclick="event.stopPropagation(); window.open('\\\${testEnvUrl}', '_blank')">
-                测试环境
-              </button>
+          const levelsHTML = categoryLevels.map(level => {
+            const completed = completedLevels.includes(level.id);
+            const completedClass = completed ? 'completed' : '';
+
+            let testEnvButton = '';
+            if (level.testEnv) {
+              const testEnvUrl = typeof level.testEnv === 'string' ?
+                \\\`/test/\\\${level.testEnv}\\\` :
+                \\\`/test/\\\${level.id}\\\`;
+              testEnvButton = \\\`
+                <button class="test-env-btn" onclick="event.stopPropagation(); window.open('\\\${testEnvUrl}', '_blank')">
+                  测试环境
+                </button>
+              \\\`;
+            }
+
+            return \\\`
+              <div class="level-card \\\${completedClass}" onclick="openLevel(\\\${level.id})">
+                <div class="level-header">
+                  <span class="level-id">Level \\\${level.id}</span>
+                  <span class="difficulty \\\${level.difficulty}">\\\${level.difficulty}</span>
+                </div>
+                <h3 class="level-name">\\\${level.name}</h3>
+                <p class="category"> \\\${level.category}</p>
+                <p class="description">\\\${level.description}</p>
+                \\\${testEnvButton}
+              </div>
             \\\`;
-          }
+          }).join('');
 
           return \\\`
-            <div class="level-card \\\${completedClass}" onclick="openLevel(\\\${level.id})">
-              <div class="level-header">
-                <span class="level-id">Level \\\${level.id}</span>
-                <span class="difficulty \\\${level.difficulty}">\\\${level.difficulty}</span>
+            <div class="category-section">
+              <h2 class="category-title">\\\${category}</h2>
+              <div class="levels-grid">
+                \\\${levelsHTML}
               </div>
-              <h3 class="level-name">\\\${level.name}</h3>
-              <p class="category"> \\\${level.category}</p>
-              <p class="description">\\\${level.description}</p>
-              \\\${testEnvButton}
             </div>
           \\\`;
         }).join('');
@@ -2545,6 +2600,7 @@ const HTML_CONTENT = `<!DOCTYPE html>
         await updateProgress();
       } catch (error) {
         console.error('加载关卡失败:', error);
+        document.getElementById('levelsGrid').innerHTML = '<p style="color: red; text-align: center;">加载失败，请刷新页面重试</p>';
       }
     }
 
