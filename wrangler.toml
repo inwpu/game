@@ -5,10 +5,33 @@ compatibility_date = "2025-11-25"
 # Workers 配置
 workers_dev = true
 
-# KV 命名空间绑定（用于访客统计）
-# 如果不需要统计功能，可以注释掉整个 [[kv_namespaces]] 块
+# 自定义域名路由（在 Cloudflare Dashboard 中配置 DNS）
+# 域名: game.hxorz.cn
+# 配置步骤:
+# 1. 在 Cloudflare DNS 添加 CNAME 记录: game.hxorz.cn -> game.snnuisdc.workers.dev
+# 2. 在 Workers & Pages > game > Settings > Domains & Routes 添加自定义域名
+
+# 可观测性配置
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1
+
+# KV 命名空间绑定（用于用户进度、访客统计、排行榜）
+# 重要：用户进度和排行榜功能需要KV存储，必须启用！
 # 创建命名空间: wrangler kv:namespace create "STATS_KV"
 # 创建预览命名空间: wrangler kv:namespace create "STATS_KV" --preview
+# 取消下面的注释并填入返回的 id 和 preview_id
 # [[kv_namespaces]]
 # binding = "STATS_KV"
 # id = "your-kv-namespace-id"
