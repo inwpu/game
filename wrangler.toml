@@ -14,28 +14,27 @@ workers_dev = true
 # 可观测性配置
 [observability]
 enabled = false
-head_sampling_rate = 1
 
 [observability.logs]
 enabled = true
-head_sampling_rate = 1
-persist = true
 invocation_logs = true
-
-[observability.traces]
-enabled = false
-persist = true
-head_sampling_rate = 1
 
 # KV 命名空间绑定（用于用户进度、访客统计、排行榜）
 # 重要：用户进度和排行榜功能需要KV存储，必须启用！
-# 创建命名空间: wrangler kv:namespace create "STATS_KV"
-# 创建预览命名空间: wrangler kv:namespace create "STATS_KV" --preview
-# 取消下面的注释并填入返回的 id 和 preview_id
-# [[kv_namespaces]]
-# binding = "STATS_KV"
-# id = "your-kv-namespace-id"
-# preview_id = "your-preview-kv-namespace-id"
+#
+# 配置方式1: 通过 Cloudflare Dashboard（推荐用于GitHub自动部署）
+#   1. Dashboard → Workers & Pages → KV → Create namespace → 输入 STATS_KV
+#   2. Dashboard → Workers & Pages → game → Settings → Variables → KV Namespace Bindings
+#   3. Add binding: Variable name = STATS_KV, 选择刚创建的 namespace
+#   4. 提交代码到GitHub触发重新部署
+#
+# 配置方式2: 通过 wrangler.toml（推荐用于本地CLI部署）
+#   1. 运行: wrangler kv:namespace create "STATS_KV"
+#   2. 取消下面的注释并填入返回的 id
+#
+[[kv_namespaces]]
+binding = "STATS_KV"
+id = "8ae1c2569cdd4a6ea50ad81873a26f74"
 
 # 开发服务器配置
 [dev]

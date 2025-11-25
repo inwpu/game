@@ -1168,9 +1168,14 @@ async function handleSubmitAnswer(request, env) {
     const visitorId = generateVisitorId(fingerprint, ip);
     const result = await level.validate(request, fingerprint, answer);
 
-    // 如果答案正确，保存进度
-    if (result.passed && env.STATS_KV) {
-      await saveCompletedLevel(env, visitorId, levelId);
+    // 如果答案正确，生成MD5 hash并保存进度
+    if (result.passed) {
+      const flagHash = await generateDynamicFlag(levelId, fingerprint, answer || result.flag);
+      result.flagHash = flagHash; // 添加MD5 hash到响应
+
+      if (env.STATS_KV) {
+        await saveCompletedLevel(env, visitorId, levelId);
+      }
     }
 
     return new Response(JSON.stringify(result), {
@@ -2634,9 +2639,16 @@ const HTML_CONTENT = `<!DOCTYPE html>
 
         if (result.passed) {
           resultBox.className = 'result-box success';
+          let flagDisplay = \`<div class="flag"> \${result.flag}</div>\`;
+
+          // 如果有MD5 hash，也显示出来
+          if (result.flagHash) {
+            flagDisplay += \`<div style="margin-top: 10px; color: #00d4ff; font-size: 12px;">MD5: \${result.flagHash}</div>\`;
+          }
+
           resultBox.innerHTML = \`
             <strong> \${result.message}</strong>
-            <div class="flag"> \${result.flag}</div>
+            \${flagDisplay}
           \`;
 
           // 重新加载关卡列表以显示完成标记（从服务器获取最新进度）
