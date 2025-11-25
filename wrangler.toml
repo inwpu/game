@@ -1,26 +1,18 @@
-name = "security-ctf-game"
+name = "game"
 main = "src/index.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-11-25"
 
 # Workers 配置
 workers_dev = true
-route = ""
-zone_id = ""
-
-# 账户信息（部署时需要配置）
-account_id = ""
 
 # KV 命名空间绑定（用于访客统计）
+# 如果不需要统计功能，可以注释掉整个 [[kv_namespaces]] 块
 # 创建命名空间: wrangler kv:namespace create "STATS_KV"
 # 创建预览命名空间: wrangler kv:namespace create "STATS_KV" --preview
-[[kv_namespaces]]
-binding = "STATS_KV"
-id = ""  # 填入生产环境的 KV namespace ID
-preview_id = ""  # 填入预览环境的 KV namespace ID
-
-# 环境变量（可选）
-[vars]
-ENVIRONMENT = "production"
+# [[kv_namespaces]]
+# binding = "STATS_KV"
+# id = "your-kv-namespace-id"
+# preview_id = "your-preview-kv-namespace-id"
 
 # 开发服务器配置
 [dev]
@@ -28,19 +20,11 @@ ip = "0.0.0.0"
 port = 8787
 local_protocol = "http"
 
-# 构建配置
-[build]
-command = ""
-watch_dirs = ["src"]
-
 # 部署配置说明
-# 1. 安装 Wrangler CLI: npm install -g wrangler
-# 2. 登录 Cloudflare: wrangler login
-# 3. 获取 account_id: wrangler whoami
-# 4. 修改上面的 account_id
-# 5. 创建 KV 命名空间:
-#    wrangler kv:namespace create "STATS_KV"
-#    wrangler kv:namespace create "STATS_KV" --preview
-#    将返回的 id 填入上面的 kv_namespaces 配置中
-# 6. 本地开发: wrangler dev
-# 7. 部署: wrangler deploy
+# 1. 本地开发: npm run dev (或 wrangler dev)
+# 2. 部署: npm run deploy (或 wrangler deploy)
+#
+# 可选：启用访客统计功能
+# 1. 创建 KV 命名空间: wrangler kv:namespace create "STATS_KV"
+# 2. 创建预览命名空间: wrangler kv:namespace create "STATS_KV" --preview
+# 3. 取消注释上面的 [[kv_namespaces]] 块，填入返回的 id
